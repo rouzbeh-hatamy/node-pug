@@ -7,6 +7,7 @@ if (major < 7 || (major === 7 && minor <= 5)) {
   process.exit();
 }
 
+
 // import environmental variables from our variables.env file
 require('dotenv').config({ path: 'variables.env' });
 
@@ -22,6 +23,10 @@ mongoose.connection.on('error', (err) => {
 
 //import all models
 require('./models/Store')
+
+const init = async () => {
+  const res = await axios.get(`${TELEGRAM_API}/setWebhook?url=${WEBHOOK_URL}`)
+}
 
 
 
