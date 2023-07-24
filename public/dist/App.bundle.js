@@ -14,13 +14,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "$$": function() { return /* binding */ $$; }
 /* harmony export */ });
 // based on https://gist.github.com/paulirish/12fb951a8b893a454b32
+
 var $ = document.querySelector.bind(document);
 var $$ = document.querySelectorAll.bind(document);
-
 Node.prototype.on = window.on = function (name, fn) {
   this.addEventListener(name, fn);
 };
-
 NodeList.prototype.__proto__ = Array.prototype; // eslint-disable-line
 
 NodeList.prototype.on = NodeList.prototype.addEventListener = function (name, fn) {
@@ -28,7 +27,6 @@ NodeList.prototype.on = NodeList.prototype.addEventListener = function (name, fn
     elem.on(name, fn);
   });
 };
-
 
 
 /***/ }),

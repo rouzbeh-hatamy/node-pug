@@ -10,8 +10,9 @@ if (major < 7 || (major === 7 && minor <= 5)) {
 
 
 // import environmental variables from our variables.env file
-require('dotenv').config({ path: '.env' });
+require('dotenv').config({ path: 'variables.env' });
 
+const bot = require('./telegramBot');
 // Connect to our Database and handle any bad connections
 mongoose.connect(process.env.DATABASE);
 mongoose.Promise = global.Promise; // Tell Mongoose to use ES6 promises
@@ -25,21 +26,9 @@ mongoose.connection.on('error', (err) => {
 //import all models
 require('./models/Store')
 
-const init = async () => {
-  const token = process.env.TOKEN
-  const serverUrl = process.env.SERVER_URL
-  const TELEGRAM_API = `https://api.telegram.org/bot${token}`
-  const URI = `/webhook/${token}`
-  const WEBHOOK_URL = serverUrl + URI
-
-  const res = await axios.get(`${TELEGRAM_API}/setWebhook?url=${WEBHOOK_URL}`)
-  console.log('====================================');
-  console.log(res.data);
-  console.log('====================================');
-}
 
 
-init()
+
 
 
 
