@@ -16,6 +16,9 @@ const UserSchema = new mongoose.Schema({
     name: {
         type: String,
     },
+    username: {
+        type: String,
+    },
     id: {
         type: Number
     },
