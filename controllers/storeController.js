@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Store = mongoose.model('Store')
 const axios = require('axios')
+const bot = require('../telegramBot')
 
 
 exports.homePage = (req, res) => {
@@ -12,9 +13,7 @@ exports.addPage = (req, res) => {
 }
 
 exports.createStore = async (req, res) => {
-    const store = new Store(req.body)
-    const token = process.env.TOKEN
-    const TELEGRAM_API = `https://api.telegram.org/bot${token}`
+    const store = await (new Store(req.body)).save()
     const chatId = 92818586
     const text = `
     🤑 ‼️ *new store created* ‼️🤑
@@ -24,11 +23,25 @@ exports.createStore = async (req, res) => {
     *description:* ${store.description}
 
     *tags:* ${store.tags.join(' ,')} `
-    await store.save()
-    await axios.post(`${TELEGRAM_API}/sendMessage`, {
-        chat_id: chatId,
-        parse_mode:"markdown",
-        text
-    })
-    res.redirect('/add')
+
+    bot.sendMessage(chatId, text, { parse_mode: "Markdown" })
+
+    res.redirect(`/store/${store.slug}`)
+}
+
+exports.getStores = async (req, res) => {
+    const stores = await Store.find()
+    res.render('stores', { title: 'stores', stores })
+}
+
+exports.editStore = async (req, res) => {
+    const store = await Store.findOne({ _id: req.params.id })
+    //todo: confirm account
+    res.render('editStore', { title: `edit ${store.name}`, store })
+}
+
+exports.updateStore = async (req, res) => {
+    const store = await Store.findOneAndUpdate({ _id: req.params.id })
+    //todo: confirm account
+    res.render('editStore', { title: `edit ${store.name}`, store })
 }
