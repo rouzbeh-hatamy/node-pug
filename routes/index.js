@@ -6,10 +6,20 @@ const { catchErrors } = require('../handlers/errorHandlers')
 // Do work here
 router.get('/', catchErrors(storeController.getStores));
 router.get('/stores', catchErrors(storeController.getStores));
+router.get('/stores/:slug', catchErrors(storeController.getStoreBySlug));
 router.get('/stores/:id/edit', (storeController.editStore));
 router.get('/add', storeController.addPage);
 router.get('/bot/register', telegramController.registerBot);
-router.post('/add', catchErrors(storeController.createStore));
-router.post('/add/:id', catchErrors(storeController.updateStore));
+
+router.post('/add',
+    storeController.upload,
+    catchErrors(storeController.resize),
+    catchErrors(storeController.createStore));
+
+router.post('/add/:id',
+    storeController.upload,
+    catchErrors(storeController.resize),
+    catchErrors(storeController.updateStore));
+
 router.get('/getCommands', telegramController.getCommands)
 module.exports = router;
