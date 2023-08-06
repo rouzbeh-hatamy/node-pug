@@ -39,7 +39,7 @@ exports.createStore = async (req, res) => {
 
     bot.sendMessage(chatId, text, { parse_mode: "Markdown" })
 
-    res.redirect(`/store/${store.slug}`)
+    res.redirect(`/stores/${store.slug}`)
 }
 
 exports.getStores = async (req, res) => {
@@ -87,6 +87,9 @@ exports.resize = async (req, res, next) => {
     next()
 }
 
-exports.getStoreBySlug = async (req, res) => {
-    res.send('works')
+exports.getStoreBySlug = async (req, res, next) => {
+    const store = await Store.findOne({ slug: req.params.slug })
+    if (!store) return next()
+
+    res.render('store', { store, title: store.name })
 }

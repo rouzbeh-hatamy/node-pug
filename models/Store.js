@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const slug = require('slugs')
+const uuid = require('uuid')
 
 mongoose.Promise = global.Promise
 
@@ -36,12 +37,18 @@ const storeSchema = new mongoose.Schema({
     photo: String
 })
 
-storeSchema.pre('save', function (next) {
+storeSchema.pre('save', async function (next) {
     if (!this.isModified('name')) {
         return next()
     }
+
     //make a slug from a name: lowercase and dashed
     this.slug = slug(this.name)
+    const similiarStore = await this.constructor.find({ slug: this.slug })
+
+    if (similiarStore.length) {
+        this.slug = `${this.slug}-${uuid.v4()}`
+    }
     next()
     // TODO: unique name
 })
