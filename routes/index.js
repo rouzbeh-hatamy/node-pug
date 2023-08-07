@@ -10,7 +10,9 @@ router.get('/', catchErrors(storeController.getStores));
 router.get('/stores', catchErrors(storeController.getStores));
 router.get('/stores/:slug', catchErrors(storeController.getStoreBySlug));
 router.get('/stores/:id/edit', (storeController.editStore));
-router.get('/add', storeController.addPage);
+router.get('/add',
+    authController.isLoggedIn,
+    storeController.addPage);
 router.get('/tags', catchErrors(storeController.getStoresByTag));
 router.get('/tags/:tag', catchErrors(storeController.getStoresByTag));
 router.get('/bot/register', telegramController.registerBot);
@@ -27,6 +29,7 @@ router.post('/add/:id',
 
 router.get('/getCommands', telegramController.getCommands)
 router.get('/login', userController.loginForm)
+router.post('/login', authController.login)
 
 
 router.get('/register', userController.registerForm)
@@ -35,5 +38,6 @@ router.post('/register',
     userController.register,
     authController.login)
 
-    
+router.get('/logout', authController.logout)
+
 module.exports = router;

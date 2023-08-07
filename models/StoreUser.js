@@ -24,5 +24,9 @@ const StoreUserSchema = new mongoose.Schema({
 
 StoreUserSchema.plugin(passportLocalMongoose, { usernameField: 'email' })
 StoreUserSchema.plugin(mongodbErrorHandler)
+StoreUserSchema.virtual('gravatar').get(function () {
+    const hash = md5(this.email)
+    return `https://gravatar.com/avatar/${hash}?s=200`
+})
 
 module.exports = mongoose.model('StoreUser', StoreUserSchema)
