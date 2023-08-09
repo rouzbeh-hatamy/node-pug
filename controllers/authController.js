@@ -28,10 +28,10 @@ exports.isLoggedIn = (req, res, next) => {
 
 exports.forgotPassword = async (req, res, next) => {
     /*
-    1-see if the user with that email exists
-    2-set reset token and expiry on their account
-    3-send email with the token
-    4-redirect to login page
+    1-see if the user with that email exists ✔
+    2-set reset token and expiry on their account ✔
+    3-send email with the token 🤷‍♂️
+    4-redirect to login page 🤷‍♂️
     */
     const user = await StoreUser.findOne({ email: req.body.email })
     if (!user) {
@@ -45,4 +45,22 @@ exports.forgotPassword = async (req, res, next) => {
     const resetUrl = `http://${req.headers.host}/account/reset/${user.resetPasswordToken}`
     req.flash('success', `Email sent. link:${resetUrl}`)
     res.redirect('/login')
+}
+
+exports.resetPassword = async (req, res) => {
+    const user = await StoreUser.findOne({ resetPasswordToken: req.params.token })
+    if (!user) {
+        req.flash('error', 'invalid Link')
+        return res.redirect('/login')
+    }
+
+    const currentTimestamp = Date.now();
+    const timeDifference = currentTimestamp - user.resetPasswordExpires;
+    
+    if (timeDifference >= 3600000) {
+        req.flash('error', 'your link has been expired you should request again')
+        return res.redirect('/login')
+    }
+
+    res.render('resetPassword')
 }
