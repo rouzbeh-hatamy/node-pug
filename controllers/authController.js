@@ -22,3 +22,7 @@ exports.isLoggedIn = (req, res, next) => {
     req.flash('error', 'Ooops you must login first!')
     res.redirect('/login')
 }
+
+exports.forgotPassword = (req, res, next) => {
+
+}
