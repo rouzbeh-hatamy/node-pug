@@ -9,7 +9,7 @@ const { catchErrors } = require('../handlers/errorHandlers')
 router.get('/', catchErrors(storeController.getStores));
 router.get('/stores', catchErrors(storeController.getStores));
 router.get('/stores/:slug', catchErrors(storeController.getStoreBySlug));
-router.get('/stores/:id/edit', (storeController.editStore));
+router.get('/stores/:id/edit', authController.isLoggedIn, catchErrors(storeController.editStore));
 router.get('/add',
     authController.isLoggedIn,
     storeController.addPage);
@@ -42,8 +42,8 @@ router.get('/logout', authController.logout)
 
 router.get('/account', authController.isLoggedIn, userController.account)
 router.post('/account', authController.isLoggedIn, catchErrors(userController.updateAccount))
-router.post('/account/forgot',catchErrors(authController.forgotPassword))
-router.get('/account/reset/:token',catchErrors(authController.resetPassword))
-router.post('/account/reset/:token',catchErrors(authController.setNewPassword))
+router.post('/account/forgot', catchErrors(authController.forgotPassword))
+router.get('/account/reset/:token', catchErrors(authController.resetPassword))
+router.post('/account/reset/:token', catchErrors(authController.setNewPassword))
 
 module.exports = router;
