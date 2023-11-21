@@ -2,6 +2,7 @@ const passport = require('passport')
 const mongoose = require('mongoose')
 const StoreUser = mongoose.model('StoreUser')
 const crypto = require('crypto')
+const promisify = require('es6-promisify')
 
 exports.login = passport.authenticate('local', {
     failureRedirect: '/login',
@@ -48,19 +49,45 @@ exports.forgotPassword = async (req, res, next) => {
 }
 
 exports.resetPassword = async (req, res) => {
-    const user = await StoreUser.findOne({ resetPasswordToken: req.params.token })
+    const user = await StoreUser.findOne({
+        resetPasswordToken: req.params.token,
+        resetPasswordExpires: { $gt: Date.now() }
+    })
     if (!user) {
         req.flash('error', 'invalid Link')
         return res.redirect('/login')
     }
 
-    const currentTimestamp = Date.now();
-    const timeDifference = currentTimestamp - user.resetPasswordExpires;
-    
-    if (timeDifference >= 3600000) {
-        req.flash('error', 'your link has been expired you should request again')
+    res.render('resetPassword', { title: 'Reset Your Password' })
+}
+
+exports.confirmPasswords = (req, res, next) => {
+    if (req.body.password === req.body['password-confirm']) {
+        next()
+        return
+    }
+    req.flash('error', 'passwords do not match')
+    res.redirect('back')
+}
+
+
+exports.setNewPassword = async (req, res) => {
+
+    const user = await StoreUser.findOne({
+        resetPasswordToken: req.params.token,
+        resetPasswordExpires: { $gt: Date.now() }
+    })
+
+    if (!user) {
+        req.flash('error', 'invalid Link')
         return res.redirect('/login')
     }
-
-    res.render('resetPassword')
+    const setPassword = promisify(user.setPassword(), user)
+    await setPassword(req.body.password)
+    user.resetPasswordToken = undefined
+    user.resetPasswordExpires = undefined
+    const updateUser = await user.save()
+    await req.login(updateUser)
+    req.flash('success', 'Nice! Updated')
+    res.redirect('/')
 }

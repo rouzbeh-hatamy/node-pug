@@ -13,7 +13,7 @@ const StoreUserSchema = new mongoose.Schema({
         lowercase: true,
         trim: true,
         validate: [validator.isEmail, 'invalid Email Address'],
-        required: "Please enter a n Email Address"
+        required: "Please enter an Email Address"
     },
     name: {
         type: String,
