@@ -4,6 +4,7 @@ const storeController = require('../controllers/storeController')
 const userController = require('../controllers/userController')
 const telegramController = require('../controllers/telegramController')
 const authController = require('../controllers/authController')
+const reviewController = require('../controllers/reviewController')
 const { catchErrors } = require('../handlers/errorHandlers')
 // Do work here
 
@@ -49,12 +50,12 @@ router.post('/account', authController.isLoggedIn, catchErrors(userController.up
 router.post('/account/forgot', catchErrors(authController.forgotPassword))
 router.get('/account/reset/:token', catchErrors(authController.resetPassword))
 router.post('/account/reset/:token', authController.confirmPasswords, catchErrors(authController.setNewPassword))
-
+router.post('/review/:id', authController.isLoggedIn, catchErrors(reviewController.addReview))
 
 
 
 // API Endpoints
 
-router.get('/api/search',catchErrors(storeController.searchStores))
+router.get('/api/search', catchErrors(storeController.searchStores))
 
 module.exports = router;

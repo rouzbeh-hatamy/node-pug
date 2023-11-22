@@ -30,6 +30,7 @@ mongoose.connection.on('error', (err) => {
 require('./models/Store')
 require('./models/User')
 require('./models/StoreUser')
+require('./models/Review')
 
 
 
