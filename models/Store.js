@@ -42,6 +42,12 @@ const storeSchema = new mongoose.Schema({
     }
 })
 
+// index: pre define some texts to query upon them faster
+storeSchema.index({
+    name: "text",
+    description: "text"
+})
+
 storeSchema.pre('save', async function (next) {
     if (!this.isModified('name')) {
         return next()
