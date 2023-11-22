@@ -27,10 +27,15 @@ exports.validateRegister = (req, res, next) => {
 }
 
 exports.register = async (req, res, next) => {
-    const newUser = new StoreUser({ email: req.body.email, name: req.body.name })
-    const registerWithPromise = promisify(StoreUser.register, StoreUser)
-    await registerWithPromise(newUser, req.body.password)
-    next()
+    try {
+        const newUser = new StoreUser({ email: req.body.email, name: req.body.name })
+        const registerWithPromise = promisify(StoreUser.register, StoreUser)
+        await registerWithPromise(newUser, req.body.password)
+        next()
+    } catch (error) {
+        req.flash('error', error.message)
+        res.redirect('back')
+    }
 }
 
 exports.account = async (req, res, next) => {
