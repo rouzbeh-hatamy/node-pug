@@ -2205,7 +2205,9 @@ NodeList.prototype.on = NodeList.prototype.addEventListener = function (name, fn
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var axios = __webpack_require__(/*! axios */ "./node_modules/.pnpm/axios@0.24.0/node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/.pnpm/axios@0.24.0/node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
 function searchResultsHtml(stores) {
   return stores.map(function (store) {
     return "\n        <a href=\"/store/".concat(store.slug, "\" class=\"search__result\">\n        <strong>").concat(store.name, "</strong>\n        </a>\n        ");
@@ -2221,7 +2223,7 @@ function typeAhead(search) {
     }
     searchResults.style.display = 'block';
     searchResults.innerHTML = '';
-    axios.get("/api/search?q=".concat(this.value)).then(function (res) {
+    axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/search?q=".concat(this.value)).then(function (res) {
       if (res.data.length) {
         var html = searchResultsHtml(res.data);
         searchResults.innerHTML = html;
@@ -2230,7 +2232,10 @@ function typeAhead(search) {
       console.log(err);
     });
   });
+
+  // handle Keyboard inputs
 }
+
 /* harmony default export */ __webpack_exports__["default"] = (typeAhead);
 
 /***/ }),
@@ -2275,6 +2280,18 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
