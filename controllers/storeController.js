@@ -117,6 +117,11 @@ exports.getStoresByTag = async (req, res) => {
     res.render('tags', { tags, stores, title: "Tags page", tag })
 }
 
+exports.getTopStores = async (req, res) => {
+    const stores = await Store.getTopStores()
+    res.render('topStores', { stores, title: "Top Stores" })
+}
+
 
 exports.searchStores = async (req, res) => {
     // first we find stores with the input text
@@ -137,3 +142,4 @@ exports.searchStores = async (req, res) => {
 
     res.json(stores)
 }
+

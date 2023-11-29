@@ -85,4 +85,19 @@ storeSchema.statics.getTagsList = function () {
     ])
 }
 
+storeSchema.statics.getTopStores = function () {
+    return this.aggregate([
+        // lookup stores and populate their reviews
+        { $lookup: { from: "reviews", localField: "_id", foreignField: "store", as: "reviews" } },
+        // only items that have 2 or more reviews
+        { $match: { 'reviews.1': { $exists: true } } },
+        // add a new field to see the average rating 
+        { $addFields: { averageRating: { $avg: "$reviews.rating" } } },
+        //sort it based on avg rating
+        { $sort: { averageRating: -1 } },
+        //limit to 10
+        { $limit: 10 }
+    ])
+}
+
 module.exports = mongoose.model('Store', storeSchema)

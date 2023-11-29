@@ -51,7 +51,7 @@ router.post('/account/forgot', catchErrors(authController.forgotPassword))
 router.get('/account/reset/:token', catchErrors(authController.resetPassword))
 router.post('/account/reset/:token', authController.confirmPasswords, catchErrors(authController.setNewPassword))
 router.post('/review/:id', authController.isLoggedIn, catchErrors(reviewController.addReview))
-
+router.get('/top',catchErrors(storeController.getTopStores))
 
 
 // API Endpoints
