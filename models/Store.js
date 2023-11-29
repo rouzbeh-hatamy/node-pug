@@ -40,12 +40,25 @@ const storeSchema = new mongoose.Schema({
         ref: "User",
         required: ' You must supply a user'
     }
-})
+
+},
+    // readme note 1
+    {
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true },
+    })
 
 // index: pre define some texts to query upon them faster
 storeSchema.index({
     name: "text",
     description: "text"
+})
+
+// virtual
+storeSchema.virtual('reviews', {
+    ref: "Review", //what model to link
+    localField: "_id", // which field on store model
+    foreignField: "store" // which field on review model
 })
 
 storeSchema.pre('save', async function (next) {
